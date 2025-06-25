@@ -120,8 +120,6 @@ trait ImageTrait
      */
     protected function addMargin($sourceImage, $margin, $size, array $foregroundColor, array $backgroundColor)
     {
-        $additionalWhitespace = $this->calculateAdditionalWhiteSpace($sourceImage, $foregroundColor);
-
         if ($margin === 0) {
             return $sourceImage;
         }
@@ -134,50 +132,17 @@ trait ImageTrait
             $backgroundColor['b']
         );
         imagefill($targetImage, 0, 0, $backgroundColor);
-        imagecopyresampled(
+        imagecopy(
             $targetImage,
             $sourceImage,
             $margin,
             $margin,
-            $additionalWhitespace,
-            $additionalWhitespace,
+            0, 0,
             $size,
-            $size,
-            $size - 2 * $additionalWhitespace,
-            $size - 2 * $additionalWhitespace
+            $size
         );
 
         return $targetImage;
-    }
-
-    /**
-     * @param resource $image
-     * @param int[]    $foregroundColor
-     *
-     * @return int
-     */
-    protected function calculateAdditionalWhiteSpace($image, array $foregroundColor): int
-    {
-        $width = imagesx($image);
-        $height = imagesy($image);
-        $foregroundColor = imagecolorallocate(
-            $image,
-            $foregroundColor['r'],
-            $foregroundColor['g'],
-            $foregroundColor['b']
-        );
-        $whitespace = $width;
-        for ($y = 0; $y < $height; $y++) {
-            for ($x = 0; $x < $width; $x++) {
-                $color = imagecolorat($image, $x, $y);
-                if ($color == $foregroundColor || $x == $whitespace) {
-                    $whitespace = min($whitespace, $x);
-                    break;
-                }
-            }
-        }
-
-        return $whitespace;
     }
 
     /**
