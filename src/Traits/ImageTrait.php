@@ -161,8 +161,8 @@ trait ImageTrait
         $logoTargetWidth = $logoContents->targetWidth();
         $logoTargetHeight = $logoContents->targetHeight();
 
-        $logoX = imagesx($sourceImage) / 2 - $logoTargetWidth / 2;
-        $logoY = imagesy($sourceImage) / 2 - $logoTargetHeight / 2;
+        $logoX = ceil(imagesx($sourceImage) / 2 - $logoTargetWidth / 2);
+        $logoY = ceil(imagesy($sourceImage) / 2 - $logoTargetHeight / 2);
 
         imagecopyresampled(
             $sourceImage,
